@@ -65,7 +65,49 @@ Memory is lost when the script exits.
 uv run agent_redis.py
 ```
 
-Memory persists across restarts! Try running it twice to see the agent remember.
+Running this script twice demonstrates the usage of persistent memory by the agent that we wrote:
+
+```bash
+# Example first run:
+uv run agent_redis.py
+
+🔴 Using Redis for persistent memory storage
+📡 Connecting to Redis at redis://localhost:6379
+
+11:22:48 langgraph.store.redis INFO   Redis standalone client detected for RedisStore.
+11:22:48 langgraph.checkpoint.redis INFO   Redis client is a standalone client
+/Users/vasilegorcinschi/persorepo/langmem-agent-demo/agent_redis.py:61: LangGraphDeprecatedSinceV10: create_react_agent has been moved to `langchain.agents`. Please update your import to `from langchain.agents import create_agent`. Deprecated in LangGraph V1.0 to be removed in V2.0.
+  agent = create_react_agent(
+============================================================
+First interaction (thread-a):
+============================================================
+11:22:50 httpx INFO   HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+11:22:51 httpx INFO   HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+Agent: I don't currently have any information stored about your display mode preferences. You haven't told me your preferred display settings yet.
+
+Would you like to share your display mode preference with me? For example, you might prefer:
+- Light mode
+- Dark mode
+- Auto/adaptive mode
+- High contrast mode
+- Specific color schemes
+...
+============================================================
+✅ Memory persisted in Redis!
+💡 Tip: Restart this script and the agent will remember!
+============================================================
+
+# Second run of the same script (Redis still running)
+uv run agent_redis.py
+...
+============================================================
+First interaction (thread-a):
+============================================================
+11:27:16 httpx INFO   HTTP Request: POST http://127.0.0.1:11434/api/embed "HTTP/1.1 200 OK"
+11:27:17 httpx INFO   HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+Agent: Yes! I remember that you prefer **dark display mode**. I saved this preference in my memory, so I'll always know you like dark mode for our conversations.
+...
+```
 
 ### View Redis Memories
 
